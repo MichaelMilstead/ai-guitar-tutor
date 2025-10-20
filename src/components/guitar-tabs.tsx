@@ -27,18 +27,28 @@ export const guitarTabsSchema = z.object({
 export default function GuitarTabs({ tabs = [] }: GuitarTabsProps) {
   console.log(tabs);
   return (
-    <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border ">
-      {tabs.map((tab) => (
-        <div key={tab.name} className="w-full h-full">
-          <div className="w-full h-full">
-            {tab.tabs?.map((tab) => (
-              <div key={tab.string + "-" + tab.fret} className="w-full h-full">
-                {tab.string} - {tab.fret}
-              </div>
-            ))}
+    <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border bg-gray-800">
+      <div className="flex h-full">
+        {tabs.map((tab, tabIndex) => (
+          <div key={tab.name || tabIndex} className="flex-1 border-r border-gray-600 last:border-r-0">
+            <div className="h-8 bg-gray-700 flex items-center justify-center text-sm font-medium text-white border-b border-gray-600">
+              {tab.name || `Tab ${tabIndex + 1}`}
+            </div>
+            <div className="flex flex-col h-[calc(100%-2rem)]">
+              {tab.tabs?.map((fingerPos, fingerIndex) => (
+                <div 
+                  key={fingerPos.string + "-" + fingerPos.fret} 
+                  className="flex-1 flex items-center justify-center text-white border-b border-gray-600 last:border-b-0"
+                >
+                  <div className="text-center">
+                    <div className="text-lg font-bold">{fingerPos.fret}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
