@@ -1,8 +1,8 @@
 "use client";
 
+import { InteractableGuitarTabs } from "@/components/guitar-tabs";
 import LatestTamboMessage from "@/components/latest-tambo-message";
 import LatestUserMessage from "@/components/latest-user-message";
-import { InteractableMap } from "@/components/map";
 import TamboToolcall from "@/components/tambo-toolcall";
 import { useMcpServers } from "@/components/tambo/mcp-config-modal";
 import {
@@ -28,7 +28,7 @@ export default function Home() {
         <div className="h-full w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
           <TamboToolcall />
           <LatestTamboMessage />
-          <InteractableMap />
+          <InteractableGuitarTabs />
           <LatestUserMessage />
           <div className="w-full max-w-4xl mx-auto">
             <div className="p-4">
