@@ -19,21 +19,25 @@ export const guitarTabsSchema = z.object({
     name: z.string().describe("The name of the guitar tab"),
     tabs: z.array(z.object({
       string: z.number().describe("The string number (1-6)"),
-      fret: z.number().describe("The fret number (0-12)"),
+      fret: z.number().describe("The fret number (0-12). Use -1 to indicate no finger position (unplayed string)"),
     })).describe("The finger positions for the guitar tab"),
   })),
 });
 
 export default function GuitarTabs({ tabs = [] }: GuitarTabsProps) {
-  console.log(tabs);
+  const stringLabels = ["E", "A", "D", "G", "B", "E"];
   return (
     <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border bg-gray-800">
       <div className="flex h-full">
+        <div className="flex flex-col h-full bg-gray-700 items-center justify-center text-sm font-medium text-white border-b border-gray-600">
+          {stringLabels.reverse().map((label) => (
+            <div key={label} className="flex-1 text-center items-center justify-center h-full">{label}</div>
+          ))}
+        </div>
         {tabs.map((tab, tabIndex) => (
           <div key={tab.name || tabIndex} className="flex-1 border-r border-gray-600 last:border-r-0">
-            <div className="h-8 bg-gray-700 flex items-center justify-center text-sm font-medium text-white border-b border-gray-600">
-              {tab.name || `Tab ${tabIndex + 1}`}
-            </div>
+
+
             <div className="flex flex-col h-[calc(100%-2rem)]">
               {tab.tabs?.map((fingerPos, fingerIndex) => (
                 <div 

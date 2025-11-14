@@ -4,7 +4,6 @@ import { InteractableGuitarTabs } from "@/components/guitar-tabs";
 import LatestTamboMessage from "@/components/latest-tambo-message";
 import LatestUserMessage from "@/components/latest-user-message";
 import TamboToolcall from "@/components/tambo-toolcall";
-import { useMcpServers } from "@/components/tambo/mcp-config-modal";
 import {
   MessageInput,
   MessageInputSubmitButton,
@@ -14,9 +13,6 @@ import { components, tools } from "@/lib/tambo";
 import { TamboProvider } from "@tambo-ai/react";
 
 export default function Home() {
-  // Load MCP server configurations
-  const mcpServers = useMcpServers();
-
   return (
     <div className="h-screen flex flex-col overflow-hidden relative bg-[#28272D]">
       <TamboProvider

@@ -1,6 +1,5 @@
 "use client";
 
-import { McpConfigModal } from "@/components/tambo/mcp-config-modal";
 import {
   Tooltip,
   TooltipProvider,
@@ -573,10 +572,6 @@ const MessageInputMcpConfigButton = React.forwardRef<
           <MCPIcon />
         </button>
       </Tooltip>
-      <McpConfigModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </TooltipProvider>
   );
 });
