@@ -27,6 +27,8 @@ export default function GuitarTabs({ tabs = [] }: GuitarTabsProps) {
   const stringLabels = ["E", "A", "D", "G", "B", "E"];
   // Reverse for display (high E at top, low E at bottom) - use toReversed to avoid mutation
   const reversedLabels = [...stringLabels].reverse();
+
+  console.log(tabs)
   
   return (
     <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border bg-gray-800">
