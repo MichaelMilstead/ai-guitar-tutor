@@ -1,48 +1,40 @@
 import { withInteractable } from "@tambo-ai/react";
 import { z } from "zod";
 
-export interface GuitarTabFingerPosition {
-  string: number;
-  fret: number;
-}
-
 export interface GuitarTabsProps {
-  tabs?: {
-    name?: string;
-    tabs?: GuitarTabFingerPosition[];
+  columns?: {
+    label?: string;
+    positions: [number, number, number, number, number, number];
   }[];
+  stringLabels?: [string, string, string, string, string, string];
 }
 
 export const guitarTabsSchema = z.object({
-  tabs: z.array(z.object({
-    name: z.string().describe("The name of the guitar tab"),
-    tabs: z.array(z.object({
-      string: z.number().describe("The string number (1-6)"),
-      fret: z.number().describe("The fret number (0-12). Use -1 to indicate no finger position (unplayed string)"),
-    })).describe("The finger positions for the guitar tab"),
-  })),
+  columns: z.array(z.object({
+    label: z.string().optional().describe("The label for this column (e.g., chord name like 'C' or 'Am', or position number)"),
+    positions: z.array(z.number())
+      .length(6)
+      .describe("An array of exactly 6 fret numbers, one for each string (strings 1-6, where 1 is high string and 6 is low string). Use 0 for open strings, 1-12 for fretted strings, and -1 for unplayed strings. CRITICAL: For SCALES, exactly ONE string must have a non-negative value (0-12), all other 5 strings must be -1. For CHORDS, multiple strings can have non-negative values."),
+  })).describe("An array of columns to display horizontally to create guitar tabs. Each column represents notes played at the same time. For CHORDS: multiple notes per column (multiple strings with non-negative fret numbers). For SCALES: exactly ONE note per column (only one string with a non-negative fret number per column, all others -1), with columns progressing sequentially from left to right through the scale notes over time. Scales should show one note per column across multiple strings as the scale progresses."),
+  stringLabels: z.array(z.string())
+    .length(6)
+    .optional()
+    .describe("An array of exactly 6 string labels, one for each string from high to low (e.g., ['E', 'A', 'D', 'G', 'B', 'E'] for standard tuning). Defaults to standard tuning if not provided."),
 });
 
-export default function GuitarTabs({ tabs = [] }: GuitarTabsProps) {
-  const stringLabels = ["E", "A", "D", "G", "B", "E"];
-  // Reverse for display (high E at top, low E at bottom) - use toReversed to avoid mutation
-  const reversedLabels = [...stringLabels].reverse();
-
-  console.log(tabs)
-  
+export default function GuitarTabs({ columns = [], stringLabels = ["E", "B", "G", "D", "A", "E"] }: GuitarTabsProps) {
   return (
     <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border bg-gray-800">
       <div className="flex h-full">
         <div className="flex flex-col h-full bg-gray-700 items-center justify-center text-sm font-medium text-white border-r border-gray-600 w-12">
-          {reversedLabels.map((label, index) => (
+          {stringLabels.map((label, index) => (
             <div key={`${label}-${index}`} className="flex-1 flex items-center justify-center w-full">{label}</div>
           ))}
         </div>
-        {tabs.map((tab, tabIndex) => (
-          <div key={tab.name || tabIndex} className="flex-1 border-r border-gray-600 last:border-r-0 relative">
+        {columns.map((column, columnIndex) => (
+          <div key={column.label || columnIndex} className="flex-1 border-r border-gray-600 last:border-r-0 relative">
             <div className="absolute inset-0 flex flex-col">
-              {/* Horizontal string lines */}
-              {reversedLabels.map((label, stringIndex) => (
+              {stringLabels.map((label, stringIndex) => (
                 <div 
                   key={`${label}-${stringIndex}`}
                   className="flex-1 flex items-center"
@@ -52,24 +44,18 @@ export default function GuitarTabs({ tabs = [] }: GuitarTabsProps) {
               ))}
             </div>
             
-            {/* Finger positions on top of strings */}
             <div className="relative h-full z-10">
-              {tab.tabs?.map((fingerPos) => {
-                if (fingerPos.fret === -1) return null; // Skip unplayed strings
-                
-                // Calculate position: string 1 is at top (index 0), string 6 is at bottom (index 5)
-                // The reversed labels array shows string 1 at top, string 6 at bottom
-                const stringIndex = fingerPos.string - 1;
-                const topPercent = ((stringIndex + 0.5) / stringLabels.length) * 100;
+              {column.positions.map((fret, stringIndex) => {
+                const topPercent = ((stringIndex + 0.5) / 6) * 100;
                 
                 return (
                   <div
-                    key={`${fingerPos.string}-${fingerPos.fret}`}
+                    key={`string-${stringIndex}-fret-${fret}`}
                     className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                     style={{ top: `${topPercent}%` }}
                   >
                     <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-sm font-bold">
-                      {fingerPos.fret}
+                      {fret !== -1 ? fret : 'x'}
                     </div>
                   </div>
                 );
