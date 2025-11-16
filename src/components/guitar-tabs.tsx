@@ -9,33 +9,62 @@ export interface GuitarTabsProps {
   stringLabels?: [string, string, string, string, string, string];
 }
 
+// Description of the props schema so Tambo knows how to use it:
 export const guitarTabsSchema = z.object({
-  columns: z.array(z.object({
-    label: z.string().optional().describe("The label for this column (e.g., chord name like 'C' or 'Am', or position number)"),
-    positions: z.array(z.number())
-      .length(6)
-      .describe("An array of exactly 6 fret numbers, one for each string (strings 1-6, where 1 is high string and 6 is low string). Use 0 for open strings, 1-12 for fretted strings, and -1 for unplayed strings. CRITICAL: For SCALES, exactly ONE string must have a non-negative value (0-12), all other 5 strings must be -1. For CHORDS, multiple strings can have non-negative values."),
-  })).describe("An array of columns to display horizontally to create guitar tabs. Each column represents notes played at the same time. For CHORDS: multiple notes per column (multiple strings with non-negative fret numbers). For SCALES: exactly ONE note per column (only one string with a non-negative fret number per column, all others -1), with columns progressing sequentially from left to right through the scale notes over time. Scales should show one note per column across multiple strings as the scale progresses."),
-  stringLabels: z.array(z.string())
+  columns: z
+    .array(
+      z.object({
+        label: z
+          .string()
+          .optional()
+          .describe(
+            "The label for this column (e.g., chord name like 'C' or 'Am', or position number)"
+          ),
+        positions: z
+          .array(z.number())
+          .length(6)
+          .describe(
+            "An array of exactly 6 fret numbers, one for each string (strings 1-6, where 1 is high string and 6 is low string). Use 0 for open strings, 1-12 for fretted strings, and -1 for unplayed strings. CRITICAL: For SCALES, exactly ONE string must have a non-negative value (0-12), all other 5 strings must be -1. For CHORDS, multiple strings can have non-negative values."
+          ),
+      })
+    )
+    .describe(
+      "An array of columns to display horizontally to create guitar tabs. Each column represents notes played at the same time. For CHORDS: multiple notes per column (multiple strings with non-negative fret numbers). For SCALES: exactly ONE note per column (only one string with a non-negative fret number per column, all others -1), with columns progressing sequentially from left to right through the scale notes over time. Scales should show one note per column across multiple strings as the scale progresses."
+    ),
+  stringLabels: z
+    .array(z.string())
     .length(6)
     .optional()
-    .describe("An array of exactly 6 string labels, one for each string from high to low (e.g., ['E', 'A', 'D', 'G', 'B', 'E'] for standard tuning). Defaults to standard tuning if not provided."),
+    .describe(
+      "An array of exactly 6 string labels, one for each string from high to low (e.g., ['E', 'A', 'D', 'G', 'B', 'E'] for standard tuning). Defaults to standard tuning if not provided."
+    ),
 });
 
-export default function GuitarTabs({ columns = [], stringLabels = ["E", "B", "G", "D", "A", "E"] }: GuitarTabsProps) {
+export default function GuitarTabs({
+  columns = [],
+  stringLabels = ["E", "B", "G", "D", "A", "E"],
+}: GuitarTabsProps) {
   return (
-    <div className="w-[600px] h-[400px] rounded-xl overflow-hidden border bg-gray-800">
+    <div className="w-[600px] h-[400px] rounded-xl overflow-hidden bg-[#161921]">
       <div className="flex h-full">
-        <div className="flex flex-col h-full bg-gray-700 items-center justify-center text-sm font-medium text-white border-r border-gray-600 w-12">
+        <div className="flex flex-col h-full items-center justify-center text-sm font-medium text-white  w-12">
           {stringLabels.map((label, index) => (
-            <div key={`${label}-${index}`} className="flex-1 flex items-center justify-center w-full">{label}</div>
+            <div
+              key={`${label}-${index}`}
+              className="flex-1 flex items-center justify-center w-full"
+            >
+              {label}
+            </div>
           ))}
         </div>
         {columns.map((column, columnIndex) => (
-          <div key={column.label || columnIndex} className="flex-1 border-r border-gray-600 last:border-r-0 relative">
+          <div
+            key={column.label || columnIndex}
+            className="flex-1 border-r border-gray-600 last:border-r-0 relative"
+          >
             <div className="absolute inset-0 flex flex-col">
               {stringLabels.map((label, stringIndex) => (
-                <div 
+                <div
                   key={`${label}-${stringIndex}`}
                   className="flex-1 flex items-center"
                 >
@@ -43,11 +72,11 @@ export default function GuitarTabs({ columns = [], stringLabels = ["E", "B", "G"
                 </div>
               ))}
             </div>
-            
+
             <div className="relative h-full z-10">
               {column.positions.map((fret, stringIndex) => {
                 const topPercent = ((stringIndex + 0.5) / 6) * 100;
-                
+
                 return (
                   <div
                     key={`string-${stringIndex}-fret-${fret}`}
@@ -55,7 +84,7 @@ export default function GuitarTabs({ columns = [], stringLabels = ["E", "B", "G"
                     style={{ top: `${topPercent}%` }}
                   >
                     <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-sm font-bold">
-                      {fret !== -1 ? fret : 'x'}
+                      {fret !== -1 ? fret : "x"}
                     </div>
                   </div>
                 );
@@ -68,6 +97,7 @@ export default function GuitarTabs({ columns = [], stringLabels = ["E", "B", "G"
   );
 }
 
+// Wrapper so Tambo can interact with it:
 export const InteractableGuitarTabs = withInteractable(GuitarTabs, {
   componentName: "guitar-tabs",
   description: "A component for displaying guitar tabs",

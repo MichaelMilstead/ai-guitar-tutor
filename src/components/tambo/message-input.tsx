@@ -326,7 +326,7 @@ const MessageInputInternal = React.forwardRef<
       >
         <div
           className={cn(
-            "relative flex flex-col rounded-xl bg-[#1B1A1D] shadow-md p-2 px-3"
+            "relative flex flex-col rounded-xl bg-[#161921] shadow-md p-2 px-3"
           )}
         >
           {isDragging && (
@@ -835,6 +835,5 @@ export {
   MessageInputSubmitButton,
   MessageInputTextarea,
   MessageInputToolbar,
-  messageInputVariants
+  messageInputVariants,
 };
-
