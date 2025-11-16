@@ -14,24 +14,33 @@ import { TamboProvider } from "@tambo-ai/react";
 
 export default function Home() {
   return (
-    <div className="h-screen flex flex-col overflow-hidden relative bg-[#232834]">
+    <div className="h-screen flex flex-col justify-center items-center overflow-hidden relative bg-[#232834]">
       <TamboProvider
         apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
         components={components}
         tools={tools}
         tamboUrl={process.env.NEXT_PUBLIC_TAMBO_URL}
       >
-        <div className="h-full w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
-          <TamboToolcall />
-          <LatestTamboMessage />
-          <InteractableGuitarTabs />
-          <LatestUserMessage />
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="p-4">
-              <MessageInput contextKey="tambo-template">
-                <MessageInputTextarea placeholder="Ask how to play anything" />
-                <MessageInputSubmitButton />
-              </MessageInput>
+        <div className="h-full max-h-1/2 w-full max-w-4xl mx-auto flex flex justify-center items-center">
+          {/* Left column: Toolcall and Guitar Tabs */}
+          <div className="w-1/2 h-full flex flex-col items-center justify-center p-4">
+            <TamboToolcall />
+            <InteractableGuitarTabs />
+          </div>
+
+          {/* Right column: Messages and Input */}
+          <div className="w-1/2 h-full flex flex-col items-center justify-center p-4">
+            <div className="w-full h-full">
+              <LatestUserMessage />
+              <LatestTamboMessage />
+            </div>
+            <div className="w-full max-w-2xl">
+              <div className="p-4">
+                <MessageInput contextKey="tambo-template">
+                  <MessageInputTextarea placeholder="Ask how to play anything" />
+                  <MessageInputSubmitButton />
+                </MessageInput>
+              </div>
             </div>
           </div>
         </div>

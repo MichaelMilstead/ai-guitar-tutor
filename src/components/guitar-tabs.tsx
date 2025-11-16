@@ -45,7 +45,7 @@ export default function GuitarTabs({
   stringLabels = ["E", "B", "G", "D", "A", "E"],
 }: GuitarTabsProps) {
   return (
-    <div className="w-[600px] h-[400px] rounded-xl overflow-hidden bg-[#161921]">
+    <div className="w-full h-[50%] rounded-xl overflow-hidden bg-[#161921]">
       <div className="flex h-full">
         <div className="flex flex-col h-full items-center justify-center text-sm font-medium text-white  w-12">
           {stringLabels.map((label, index) => (

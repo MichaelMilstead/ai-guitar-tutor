@@ -25,7 +25,7 @@ export default function LatestTamboMessage() {
   }
 
   return (
-    <div className="text-[#FBFBFB] p-4 py-8 w-full text-left">
+    <div className="text-[#FBFBFB] p-2 w-full text-left">
       {extractMessageContent(latestTamboMessage)}
       {!isIdle && (
         <span className="inline-block ml-1 text-xs text-gray-500 rounded-full bg-[#FEE0AA] h-2 w-2 animate-pulse"></span>
