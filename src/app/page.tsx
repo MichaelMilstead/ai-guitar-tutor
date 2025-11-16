@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/footer";
 import GithubLink from "@/components/github-link";
 import { InteractableGuitarTabs } from "@/components/guitar-tabs";
 import LatestTamboMessage from "@/components/latest-tambo-message";
@@ -45,6 +46,7 @@ export default function Home() {
           </div>
         </div>
       </TamboProvider>
+      <Footer />
     </div>
   );
 }
