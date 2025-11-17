@@ -3,8 +3,7 @@
 import Footer from "@/components/footer";
 import GithubLink from "@/components/github-link";
 import { InteractableGuitarTabs } from "@/components/guitar-tabs";
-import LatestTamboMessage from "@/components/latest-tambo-message";
-import LatestUserMessage from "@/components/latest-user-message";
+import MessageList from "@/components/message-list";
 import TamboToolcall from "@/components/tambo-toolcall";
 import {
   MessageInput,
@@ -34,8 +33,7 @@ export default function Home() {
           {/* Right column: Messages and Input */}
           <div className="w-1/2 h-full flex flex-col items-center justify-center p-4">
             <div className="w-full h-full">
-              <LatestUserMessage />
-              <LatestTamboMessage />
+              <MessageList />
             </div>
             <div className="w-full max-w-2xl">
               <MessageInput contextKey="tambo-template">
