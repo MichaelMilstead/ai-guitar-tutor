@@ -30,7 +30,7 @@ export const guitarTabsSchema = z.object({
       })
     )
     .describe(
-      "An array of columns to display horizontally to create guitar tabs. Each column represents notes played at the same time. For CHORDS: multiple notes per column (multiple strings with non-negative fret numbers). For SCALES: exactly ONE note per column (only one string with a non-negative fret number per column, all others -1), with columns progressing sequentially from left to right through the scale notes over time. Scales should show one note per column across multiple strings as the scale progresses."
+      "An array of columns to display horizontally to create guitar tabs. Each column represents notes played at the same time. For CHORDS: multiple notes per column (multiple strings with non-negative fret numbers). For SCALES: exactly ONE note per column (only one string with a non-negative fret number per column, all others -1), with columns progressing sequentially from left to right through the scale notes over time. Scales should show one note per column across multiple strings as the scale progresses. A C-major scale might start with [0, 3, 0, 0, 0, 0], [0, 5, 0, 0, 0, 0], [0, 0, 2, 0, 0, 0], [0, 0, 3, 0, 0, 0], [0, 0, 5, 0, 0, 0], [0, 0, 0, 2, 0, 0], [0, 0, 0, 4, 0, 0], [0, 0, 0, 5, 0, 0]."
     ),
   stringLabels: z
     .array(z.string())
@@ -95,7 +95,7 @@ export default function GuitarTabs({
                     style={{ top: `${topPercent}%` }}
                   >
                     <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-sm font-bold">
-                      {fret !== -1 ? fret : "x"}
+                      {fret !== -1 ? fret : ""}
                     </div>
                   </div>
                 );
