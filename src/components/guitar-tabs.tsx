@@ -2,6 +2,7 @@ import { withInteractable } from "@tambo-ai/react";
 import { z } from "zod";
 
 export interface GuitarTabsProps {
+  title?: string;
   columns?: {
     label?: string;
     positions: [number, number, number, number, number, number];
@@ -24,7 +25,7 @@ export const guitarTabsSchema = z.object({
           .array(z.number())
           .length(6)
           .describe(
-            "An array of exactly 6 fret numbers, one for each string (strings 1-6, where 1 is high string and 6 is low string). Use 0 for open strings, 1-12 for fretted strings, and -1 for unplayed strings. CRITICAL: For SCALES, exactly ONE string must have a non-negative value (0-12), all other 5 strings must be -1. For CHORDS, multiple strings can have non-negative values."
+            "An array of exactly 6 fret numbers, one for each string (strings 1-6, where 1 is high string and 6 is low string). Use 0 for open strings, 1-12 for fretted strings, and -1 for unplayed strings. CRITICAL: For SCALES, exactly ONE string must have a non-negative value (0-12), all other 5 strings must be -1. For CHORDS, multiple strings can have non-negative values. Make absolutely sure that the notes are in order from highest to lowest string. For example, if the chord is E major, the fret numbers should be [0, 0, 1, 2, 2, 0].One note of a scale might be: [0, 0, 4, 0, 0, 0]."
           ),
       })
     )
@@ -36,17 +37,27 @@ export const guitarTabsSchema = z.object({
     .length(6)
     .optional()
     .describe(
-      "An array of exactly 6 string labels, one for each string from high to low (e.g., ['E', 'A', 'D', 'G', 'B', 'E'] for standard tuning). Defaults to standard tuning if not provided."
+      "An array of exactly 6 string labels, one for each string from high to low (e.g., ['E', 'B', 'G', 'D', 'A', 'E'] for standard tuning). Defaults to standard tuning if not provided."
+    ),
+  title: z
+    .string()
+    .optional()
+    .describe(
+      "The title for the guitar tabs to display to the user. Maybe a song name, or a chord progression name."
     ),
 });
 
 export default function GuitarTabs({
   columns = [],
   stringLabels = ["E", "B", "G", "D", "A", "E"],
+  title = "",
 }: GuitarTabsProps) {
   return (
-    <div className="w-full h-[50%] rounded-xl overflow-hidden bg-[#161921]">
-      <div className="flex h-full">
+    <div className="w-full h-full max-h-1/2 flex flex-col">
+      {title && (
+        <div className="text-md text-white p-2 flex-shrink-0">{title}</div>
+      )}
+      <div className="flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0">
         <div className="flex flex-col h-full items-center justify-center text-sm font-medium text-white  w-12">
           {stringLabels.map((label, index) => (
             <div
@@ -59,7 +70,7 @@ export default function GuitarTabs({
         </div>
         {columns.map((column, columnIndex) => (
           <div
-            key={column.label || columnIndex}
+            key={`${column.label}-${columnIndex}`}
             className="flex-1 border-r border-gray-600 last:border-r-0 relative"
           >
             <div className="absolute inset-0 flex flex-col">
