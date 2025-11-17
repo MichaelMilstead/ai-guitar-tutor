@@ -15,7 +15,7 @@ import { TamboProvider } from "@tambo-ai/react";
 
 export default function Home() {
   return (
-    <div className="h-screen flex flex-col justify-center items-center overflow-hidden relative bg-[#232834]">
+    <div className="h-screen flex flex-col justify-center items-center overflow-hidden relative bg-[#232834] font-semibold">
       <GithubLink />
       <TamboProvider
         apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
@@ -32,7 +32,7 @@ export default function Home() {
 
           {/* Right column: Messages and Input */}
           <div className="w-1/2 h-full flex flex-col items-center justify-center p-4">
-            <div className="w-full h-full">
+            <div className="w-full h-full font-semibold">
               <MessageList />
             </div>
             <div className="w-full max-w-2xl">
