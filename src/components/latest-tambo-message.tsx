@@ -28,7 +28,7 @@ export default function LatestTamboMessage() {
     <div className="text-[#FBFBFB] p-2 w-full text-left">
       {extractMessageContent(latestTamboMessage)}
       {!isIdle && (
-        <span className="inline-block ml-1 text-xs text-gray-500 rounded-full bg-[#FEE0AA] h-2 w-2 animate-pulse"></span>
+        <span className="inline-block ml-1 text-xs text-gray-500 rounded-full bg-[#FBFBFB] h-2 w-2 animate-pulse"></span>
       )}
     </div>
   );
