@@ -55,10 +55,10 @@ export default function GuitarTabs({
   return (
     <div className="w-full h-full max-h-1/2 flex flex-col">
       {title && (
-        <div className="text-md text-white p-2 flex-shrink-0">{title}</div>
+        <div className="text-sm text-white p-2 flex-shrink-0">{title}</div>
       )}
       <div className="flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0">
-        <div className="flex flex-col h-full items-center justify-center text-sm font-medium text-white  w-12">
+        <div className="flex flex-col h-full items-center justify-center text-xs font-medium text-white  w-12">
           {stringLabels.map((label, index) => (
             <div
               key={`${label}-${index}`}
@@ -94,7 +94,7 @@ export default function GuitarTabs({
                     className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                     style={{ top: `${topPercent}%` }}
                   >
-                    <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-sm font-bold">
+                    <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-xs font-bold">
                       {fret !== -1 ? fret : ""}
                     </div>
                   </div>
