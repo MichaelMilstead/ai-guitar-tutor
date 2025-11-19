@@ -37,7 +37,7 @@ export default function Home() {
             </div>
             <div className="w-full max-w-2xl">
               <MessageInput contextKey="tambo-template">
-                <MessageInputTextarea placeholder="Ask how to play anything" />
+                <MessageInputTextarea placeholder="Ask how to play anything." />
                 <MessageInputSubmitButton />
               </MessageInput>
             </div>
