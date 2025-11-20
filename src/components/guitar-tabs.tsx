@@ -1,4 +1,4 @@
-import { withInteractable } from "@tambo-ai/react";
+import { useTamboGenerationStage, withInteractable } from "@tambo-ai/react";
 import { z } from "zod";
 
 export interface GuitarTabsProps {
@@ -71,12 +71,18 @@ export default function GuitarTabs({
   stringLabels = ["E", "B", "G", "D", "A", "E"],
   title = "A basic chord progression",
 }: GuitarTabsProps) {
+  const { isIdle } = useTamboGenerationStage();
+
   return (
     <div className="w-full h-full max-h-2/3 flex flex-col">
       {title && (
         <div className="text-sm text-white p-2 flex-shrink-0">{title}</div>
       )}
-      <div className="flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0">
+      <div
+        className={`flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0 ${
+          !isIdle ? "border-2 border-blue-500 animate-pulse-border" : ""
+        }`}
+      >
         <div className="flex flex-col h-full w-12">
           <div className="text-xs text-center py-1 flex-shrink-0 font-medium text-transparent">
             e
