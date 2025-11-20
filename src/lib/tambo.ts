@@ -28,4 +28,11 @@ export const tools: TamboTool[] = [];
  * Each component is defined with its name, description, and expected props. The components
  * can be controlled by AI to dynamically render UI elements based on user interactions.
  */
-export const components: TamboComponent[] = [];
+export const components: TamboComponent[] = [
+    // {
+    //     name: "guitar-tabs",
+    //     description: "A component for displaying guitar tabs",
+    //     component: GuitarTabs,
+    //     propsSchema: guitarTabsSchema,
+    // }
+];
