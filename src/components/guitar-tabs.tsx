@@ -92,7 +92,7 @@ export default function GuitarTabs({
             ))}
           </div>
         </div>
-        {columns.map((column, columnIndex) => (
+        {columns?.map((column, columnIndex) => (
           <div
             key={`${column.label}-${columnIndex}`}
             className="flex-1 border-r border-gray-600 last:border-r-0 relative flex flex-col"

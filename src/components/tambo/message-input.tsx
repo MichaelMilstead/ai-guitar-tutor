@@ -518,8 +518,6 @@ const MessageInputMcpConfigButton = React.forwardRef<
     className?: string;
   }
 >(({ className, ...props }, ref) => {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
   const buttonClasses = cn(
     "w-10 h-10 bg-muted text-primary rounded-lg hover:bg-muted/80 disabled:opacity-50 flex items-center justify-center cursor-pointer",
     className
@@ -563,7 +561,6 @@ const MessageInputMcpConfigButton = React.forwardRef<
         <button
           ref={ref}
           type="button"
-          onClick={() => setIsModalOpen(true)}
           className={buttonClasses}
           aria-label="Open MCP Configuration"
           data-slot="message-input-mcp-config"

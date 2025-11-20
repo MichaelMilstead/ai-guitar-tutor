@@ -3,6 +3,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <div className="absolute bottom-4 w-full z-50 text-gray-400 hover:text-white transition-colors">
+      <p className="text-sm text-center mb-2 text-gray-600">
+        a work in progress, some notes may be incorrect
+      </p>
       <div className="max-w-4xl mx-auto flex justify-center items-center">
         <Link
           href="https://github.com/tambo-ai/tambo"
