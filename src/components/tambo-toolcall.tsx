@@ -1,17 +1,16 @@
 import { useTamboThread } from "@tambo-ai/react";
 
 export default function TamboToolcall() {
-  const { thread } = useTamboThread();
+  const { thread, isIdle } = useTamboThread();
   const messages = thread?.messages || [];
+  console.log(isIdle);
 
   const latestToolcallMessage = [...messages]
     .reverse()
     .find((message) => message.role === "assistant" && message.tool_call_id);
-  if (!latestToolcallMessage) {
-    return null;
-  }
 
   const isAnyMessageAfter =
+    latestToolcallMessage &&
     messages.slice(messages.indexOf(latestToolcallMessage)).length > 0;
 
   const statusMessage = isAnyMessageAfter
@@ -25,6 +24,9 @@ export default function TamboToolcall() {
         (isAnyMessageAfter ? "" : "animate-pulse")
       }
     >
+      {!isIdle && (
+        <span className="inline-block mr-1 text-xs text-gray-500 rounded-full bg-[#FBFBFB] h-2 w-2 animate-pulse"></span>
+      )}
       {statusMessage}
     </div>
   );
