@@ -53,53 +53,63 @@ export default function GuitarTabs({
   title = "",
 }: GuitarTabsProps) {
   return (
-    <div className="w-full h-full max-h-1/2 flex flex-col">
+    <div className="w-full h-full max-h-2/3 flex flex-col">
       {title && (
         <div className="text-sm text-white p-2 flex-shrink-0">{title}</div>
       )}
       <div className="flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0">
-        <div className="flex flex-col h-full items-center justify-center text-xs font-medium text-white  w-12">
-          {stringLabels.map((label, index) => (
-            <div
-              key={`${label}-${index}`}
-              className="flex-1 flex items-center justify-center w-full"
-            >
-              {label}
-            </div>
-          ))}
+        <div className="flex flex-col h-full w-12">
+          <div className="text-xs text-center py-1 flex-shrink-0 font-medium text-transparent">e</div>
+          <div className="flex-1 flex flex-col items-center text-xs font-medium text-white min-h-0">
+            {stringLabels.map((label, index) => (
+              <div
+                key={`${label}-${index}`}
+                className="flex-1 flex items-center justify-center w-full"
+              >
+                {label}
+              </div>
+            ))}
+          </div>
         </div>
         {columns.map((column, columnIndex) => (
           <div
             key={`${column.label}-${columnIndex}`}
-            className="flex-1 border-r border-gray-600 last:border-r-0 relative"
+            className="flex-1 border-r border-gray-600 last:border-r-0 relative flex flex-col"
           >
-            <div className="absolute inset-0 flex flex-col">
-              {stringLabels.map((label, stringIndex) => (
-                <div
-                  key={`${label}-${stringIndex}`}
-                  className="flex-1 flex items-center"
-                >
-                  <div className="w-full h-px bg-gray-500"></div>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative h-full z-10">
-              {column.positions.map((fret, stringIndex) => {
-                const topPercent = ((stringIndex + 0.5) / 6) * 100;
-
-                return (
+            {column.label && (
+              <div className="text-xs text-semibold text-[#78BBE5] text-center py-1 flex-shrink-0 font-medium">
+                {column.label}
+              </div>
+            )}
+            <div className="flex-1 relative min-h-0">
+              <div className="absolute inset-0 flex flex-col">
+                {stringLabels.map((label, stringIndex) => (
                   <div
-                    key={`string-${stringIndex}-fret-${fret}`}
-                    className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                    style={{ top: `${topPercent}%` }}
+                    key={`${label}-${stringIndex}`}
+                    className="flex-1 flex items-center"
                   >
-                    <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-xs font-bold">
-                      {fret !== -1 ? fret : ""}
-                    </div>
+                    <div className="w-full h-px bg-gray-500"></div>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+
+              <div className="relative h-full z-10">
+                {column.positions.map((fret, stringIndex) => {
+                  const topPercent = ((stringIndex + 0.5) / 6) * 100;
+
+                  return (
+                    <div
+                      key={`string-${stringIndex}-fret-${fret}`}
+                      className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                      style={{ top: `${topPercent}%` }}
+                    >
+                      <div className="rounded-full w-8 h-8 flex items-center justify-center text-white text-xs font-bold">
+                        {fret !== -1 ? fret : ""}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         ))}
