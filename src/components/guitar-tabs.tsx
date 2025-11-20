@@ -47,10 +47,29 @@ export const guitarTabsSchema = z.object({
     ),
 });
 
+const defaultColumns: GuitarTabsProps["columns"] = [
+  {
+    label: "C",
+    positions: [0, 1, 0, 2, 3, -1],
+  },
+  {
+    label: "G",
+    positions: [3, 0, 0, 0, 2, 3],
+  },
+  {
+    label: "D",
+    positions: [2, 3, 2, 0, 0, -1],
+  },
+  {
+    label: "A",
+    positions: [0, 2, 2, 2, 0, -1],
+  },
+];
+
 export default function GuitarTabs({
-  columns = [],
+  columns = defaultColumns,
   stringLabels = ["E", "B", "G", "D", "A", "E"],
-  title = "",
+  title = "A basic chord progression",
 }: GuitarTabsProps) {
   return (
     <div className="w-full h-full max-h-2/3 flex flex-col">
@@ -59,7 +78,9 @@ export default function GuitarTabs({
       )}
       <div className="flex flex-1 rounded-xl overflow-hidden bg-[#161921] min-h-0">
         <div className="flex flex-col h-full w-12">
-          <div className="text-xs text-center py-1 flex-shrink-0 font-medium text-transparent">e</div>
+          <div className="text-xs text-center py-1 flex-shrink-0 font-medium text-transparent">
+            e
+          </div>
           <div className="flex-1 flex flex-col items-center text-xs font-medium text-white min-h-0">
             {stringLabels.map((label, index) => (
               <div
