@@ -3,7 +3,6 @@ import { useTamboThread } from "@tambo-ai/react";
 export default function TamboToolcall() {
   const { thread, isIdle } = useTamboThread();
   const messages = thread?.messages || [];
-  console.log(isIdle);
 
   const latestToolcallMessage = [...messages]
     .reverse()
