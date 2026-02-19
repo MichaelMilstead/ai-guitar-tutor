@@ -22,6 +22,7 @@ export default function Home() {
         components={components}
         tools={tools}
         tamboUrl={process.env.NEXT_PUBLIC_TAMBO_URL}
+        userKey={"test-guitar-key"}
       >
         <div className="h-full md:max-h-1/2 w-full max-w-4xl mx-auto flex flex-col md:flex-row justify-center items-center">
           {/* Left column: Toolcall and Guitar Tabs */}
@@ -36,7 +37,7 @@ export default function Home() {
               <MessageList />
             </div>
             <div className="w-full max-w-2xl">
-              <MessageInput contextKey="tambo-template">
+              <MessageInput>
                 <MessageInputTextarea placeholder="Ask how to play anything." />
                 <MessageInputSubmitButton />
               </MessageInput>

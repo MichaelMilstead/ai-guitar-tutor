@@ -1,9 +1,9 @@
 import { extractMessageContent } from "@/lib/utils";
-import { useTamboThread } from "@tambo-ai/react";
+import { useTambo } from "@tambo-ai/react";
 
 export default function LatestUserMessage() {
-  const { thread } = useTamboThread();
-  const latestUserMessage = [...(thread?.messages || [])]
+  const { messages } = useTambo();
+  const latestUserMessage = [...messages]
     .reverse()
     .find((message) => message.role === "user");
 

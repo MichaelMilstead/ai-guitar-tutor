@@ -1,11 +1,10 @@
-import { useTamboThread } from "@tambo-ai/react";
+import { useTambo } from "@tambo-ai/react";
 import DefaultMessage from "./default-message";
 import LatestTamboMessage from "./latest-tambo-message";
 import LatestUserMessage from "./latest-user-message";
 
 export default function MessageList() {
-  const { thread } = useTamboThread();
-  const messages = thread?.messages || [];
+  const { messages } = useTambo();
 
   return (
     <div className="w-full h-full">
