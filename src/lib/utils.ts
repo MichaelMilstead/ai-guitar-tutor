@@ -1,4 +1,4 @@
-import { TamboThreadMessage } from "@tambo-ai/react";
+import type { TamboThreadMessage } from "@tambo-ai/react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,5 +11,8 @@ export const extractMessageContent = (
 ) => {
   if (!message || !message.content) return "";
 
-  return message.content.map((content) => content.text).join("");
+  return message.content
+    .filter((block) => block.type === "text")
+    .map((block) => (block as { type: "text"; text: string }).text)
+    .join("");
 };

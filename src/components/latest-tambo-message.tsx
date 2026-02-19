@@ -1,11 +1,8 @@
 import { extractMessageContent } from "@/lib/utils";
-import { useTamboGenerationStage, useTamboThread } from "@tambo-ai/react";
+import { useTambo } from "@tambo-ai/react";
 
 export default function LatestTamboMessage() {
-  const { thread } = useTamboThread();
-  const { isIdle } = useTamboGenerationStage();
-
-  const messages = thread?.messages || [];
+  const { messages, isIdle } = useTambo();
 
   const latestTamboMessage = [...messages]
     .reverse()

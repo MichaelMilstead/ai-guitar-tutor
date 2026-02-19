@@ -1,20 +1,30 @@
-import { useTamboThread } from "@tambo-ai/react";
+import { useTambo, type TamboToolUseContent } from "@tambo-ai/react";
 
 export default function TamboToolcall() {
-  const { thread, isIdle } = useTamboThread();
-  const messages = thread?.messages || [];
+  const { messages, isIdle } = useTambo();
 
-  const latestToolcallMessage = [...messages]
-    .reverse()
-    .find((message) => message.role === "assistant" && message.tool_call_id);
+  // Find the latest tool_use content block across all assistant messages
+  let latestToolBlock: TamboToolUseContent | undefined;
+  let toolMessageIndex = -1;
+
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const msg = messages[i];
+    if (msg.role === "assistant") {
+      const toolBlock = msg.content.find(
+        (block) => block.type === "tool_use"
+      ) as TamboToolUseContent | undefined;
+      if (toolBlock) {
+        latestToolBlock = toolBlock;
+        toolMessageIndex = i;
+        break;
+      }
+    }
+  }
 
   const isAnyMessageAfter =
-    latestToolcallMessage &&
-    messages.slice(messages.indexOf(latestToolcallMessage)).length > 0;
+    toolMessageIndex >= 0 && toolMessageIndex < messages.length - 1;
 
-  const statusMessage = isAnyMessageAfter
-    ? latestToolcallMessage?.component?.completionStatusMessage
-    : latestToolcallMessage?.component?.statusMessage;
+  const statusMessage = latestToolBlock?.statusMessage;
 
   return (
     <div

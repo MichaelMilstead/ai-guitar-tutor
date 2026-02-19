@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import type { TamboThreadMessage } from "@tambo-ai/react";
+import type { TamboThreadMessage, Content } from "@tambo-ai/react";
 
 /**
  * Custom hook to merge multiple refs into one callback ref
@@ -104,7 +104,7 @@ export function usePositioning(
 /**
  * Converts message content into a safely renderable format.
  * Primarily joins text blocks from arrays into a single string.
- * @param content - The message content (string, element, array, etc.)
+ * @param content - The message content (Content[] or ReactNode)
  * @returns A renderable string or React element.
  */
 export function getSafeContent(
@@ -112,21 +112,19 @@ export function getSafeContent(
 ): string | React.ReactElement {
   if (!content) return "";
   if (typeof content === "string") return content;
-  if (React.isValidElement(content)) return content; // Pass elements through
+  if (React.isValidElement(content)) return content;
   if (Array.isArray(content)) {
-    // Filter out non-text items and join text
-    return content
-      .map((item) => (item && item.type === "text" ? (item.text ?? "") : ""))
+    return (content as Content[])
+      .filter((block) => block.type === "text")
+      .map((block) => (block as { type: "text"; text: string }).text ?? "")
       .join("");
   }
-  // Handle potential edge cases or unknown types
-  // console.warn("getSafeContent encountered unknown content type:", content);
-  return "Invalid content format"; // Or handle differently
+  return "Invalid content format";
 }
 
 /**
- * Checks if message content contains meaningful, non-empty text or images.
- * @param content - The message content (string, element, array, etc.)
+ * Checks if message content contains meaningful, non-empty text.
+ * @param content - The message content (Content[] or ReactNode)
  * @returns True if there is content, false otherwise.
  */
 export function checkHasContent(
@@ -134,18 +132,16 @@ export function checkHasContent(
 ): boolean {
   if (!content) return false;
   if (typeof content === "string") return content.trim().length > 0;
-  if (React.isValidElement(content)) return true; // Assume elements have content
+  if (React.isValidElement(content)) return true;
   if (Array.isArray(content)) {
-    return content.some(
-      (item) =>
-        item &&
-        ((item.type === "text" &&
-          typeof item.text === "string" &&
-          item.text.trim().length > 0) ||
-          (item.type === "image_url" && item.image_url?.url)),
+    return (content as Content[]).some(
+      (block) =>
+        block.type === "text" &&
+        typeof (block as { type: "text"; text: string }).text === "string" &&
+        (block as { type: "text"; text: string }).text.trim().length > 0,
     );
   }
-  return false; // Default for unknown types
+  return false;
 }
 
 /**
@@ -158,7 +154,12 @@ export function getMessageImages(
 ): string[] {
   if (!content || !Array.isArray(content)) return [];
 
-  return content
-    .filter((item) => item && item.type === "image_url" && item.image_url?.url)
-    .map((item) => item.image_url!.url);
+  // In the new SDK, images are part of resource content blocks
+  return (content as Content[])
+    .filter((block) => block.type === "resource")
+    .map((block) => {
+      const resource = (block as { type: "resource"; resource: { uri?: string } }).resource;
+      return resource?.uri ?? "";
+    })
+    .filter(Boolean);
 }

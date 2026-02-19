@@ -7,7 +7,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   useIsTamboTokenUpdating,
-  useTamboThread,
+  useTambo,
   useTamboThreadInput,
   type StagedImage,
 } from "@tambo-ai/react";
@@ -65,14 +65,12 @@ const messageInputVariants = cva("w-full", {
 interface MessageInputContextValue {
   value: string;
   setValue: (value: string) => void;
-  submit: (options: {
-    contextKey?: string;
-    streamResponse?: boolean;
-  }) => Promise<void>;
+  submit: (options?: { debug?: boolean }) => Promise<{
+    threadId: string | undefined;
+  }>;
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   isPending: boolean;
   error: Error | null;
-  contextKey?: string;
   textareaRef: React.RefObject<HTMLTextAreaElement>;
   submitError: string | null;
   setSubmitError: React.Dispatch<React.SetStateAction<string | null>>;
@@ -108,8 +106,6 @@ const useMessageInputContext = () => {
  */
 export interface MessageInputProps
   extends React.HTMLAttributes<HTMLFormElement> {
-  /** The context key identifying which thread to send messages to. */
-  contextKey?: string;
   /** Optional styling variant for the input container. */
   variant?: VariantProps<typeof messageInputVariants>["variant"];
   /** The child elements to render within the form container. */
@@ -130,12 +126,11 @@ export interface MessageInputProps
  * ```
  */
 const MessageInput = React.forwardRef<HTMLFormElement, MessageInputProps>(
-  ({ children, className, contextKey, variant, ...props }, ref) => {
+  ({ children, className, variant, ...props }, ref) => {
     return (
       <MessageInputInternal
         ref={ref}
         className={className}
-        contextKey={contextKey}
         variant={variant}
         {...props}
       >
@@ -152,18 +147,17 @@ MessageInput.displayName = "MessageInput";
 const MessageInputInternal = React.forwardRef<
   HTMLFormElement,
   MessageInputProps
->(({ children, className, contextKey, variant, ...props }, ref) => {
+>(({ children, className, variant, ...props }, ref) => {
   const {
     value,
     setValue,
     submit,
     isPending,
-    error,
     images,
     addImages,
     clearImages,
   } = useTamboThreadInput();
-  const { cancel } = useTamboThread();
+  const { cancelRun } = useTambo();
   const [displayValue, setDisplayValue] = React.useState("");
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -193,10 +187,7 @@ const MessageInputInternal = React.forwardRef<
       }
 
       try {
-        await submit({
-          contextKey,
-          streamResponse: true,
-        });
+        await submit();
         setValue("");
         // Images are cleared automatically by the TamboThreadInputProvider
         setTimeout(() => {
@@ -211,8 +202,8 @@ const MessageInputInternal = React.forwardRef<
             : "Failed to send message. Please try again."
         );
 
-        // Cancel the thread to reset loading state
-        cancel();
+        // Cancel the run to reset loading state
+        cancelRun();
       } finally {
         setIsSubmitting(false);
       }
@@ -220,11 +211,10 @@ const MessageInputInternal = React.forwardRef<
     [
       value,
       submit,
-      contextKey,
       setValue,
       setDisplayValue,
       setSubmitError,
-      cancel,
+      cancelRun,
       isSubmitting,
       images,
       clearImages,
@@ -291,8 +281,7 @@ const MessageInputInternal = React.forwardRef<
       submit,
       handleSubmit,
       isPending: isPending ?? isSubmitting,
-      error,
-      contextKey,
+      error: null,
       textareaRef,
       submitError,
       setSubmitError,
@@ -304,8 +293,6 @@ const MessageInputInternal = React.forwardRef<
       handleSubmit,
       isPending,
       isSubmitting,
-      error,
-      contextKey,
       submitError,
     ]
   );
@@ -374,7 +361,7 @@ const MessageInputTextarea = ({
 }: MessageInputTextareaProps) => {
   const { value, setValue, textareaRef, handleSubmit } =
     useMessageInputContext();
-  const { isIdle } = useTamboThread();
+  const { isIdle } = useTambo();
   const { addImage } = useTamboThreadInput();
   const isUpdatingToken = useIsTamboTokenUpdating();
   const isPending = !isIdle;
@@ -462,13 +449,13 @@ const MessageInputSubmitButton = React.forwardRef<
   MessageInputSubmitButtonProps
 >(({ className, children, ...props }, ref) => {
   const { isPending } = useMessageInputContext();
-  const { cancel } = useTamboThread();
+  const { cancelRun } = useTambo();
   const isUpdatingToken = useIsTamboTokenUpdating();
 
   const handleCancel = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    cancel();
+    cancelRun();
   };
 
   const buttonClasses = cn(

@@ -1,4 +1,4 @@
-import { useTamboGenerationStage, withInteractable } from "@tambo-ai/react";
+import { useTambo, withTamboInteractable } from "@tambo-ai/react";
 import { z } from "zod";
 
 export interface GuitarTabsProps {
@@ -71,7 +71,7 @@ export default function GuitarTabs({
   stringLabels = ["E", "B", "G", "D", "A", "E"],
   title = "A basic chord progression",
 }: GuitarTabsProps) {
-  const { isIdle } = useTamboGenerationStage();
+  const { isIdle } = useTambo();
 
   return (
     <div className="w-full h-full max-h-2/3 flex flex-col">
@@ -146,7 +146,7 @@ export default function GuitarTabs({
 }
 
 // Wrapper so Tambo can interact with it:
-export const InteractableGuitarTabs = withInteractable(GuitarTabs, {
+export const InteractableGuitarTabs = withTamboInteractable(GuitarTabs, {
   componentName: "guitar-tabs",
   description: "A component for displaying guitar tabs",
   propsSchema: guitarTabsSchema,
