@@ -1,3 +1,7 @@
+> **Tambo Cloud is shutting down.** This demo calls the hosted Tambo API, which stops responding after **October 31, 2026**. [Read the announcement](https://tambo.co/blog/posts/tambo-is-shutting-down).
+> Tambo is open source and self-hostable: see [SELF-HOSTING.md](https://github.com/tambo-ai/tambo/blob/main/SELF-HOSTING.md) to keep running it yourself.
+> The team is now building [Charming](https://usecharming.com), a collaborative cloud for apps built with any AI agent.
+
 # AI Guitar Tutor
 
 An agentic app built using [Tambo](https://github.com/tambo-ai/tambo) to allow an AI to control a guitar tabs component.
